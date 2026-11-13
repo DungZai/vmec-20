@@ -1,0 +1,29 @@
+# Local credentials and config
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.pfx
+
+# Local data, database files, and runtime logs
+/data/private/
+/data/raw/
+/runtime-logs/
+*.log
+*.db
+*.sqlite*
+
+# Frontend and Python build output
+node_modules/
+.next/
+dist/
+__pycache__/
+.venv/
+.pytest_cache/
+coverage/
+
+# Local editor and Office files
+~$*
+.DS_Store
+Thumbs.db

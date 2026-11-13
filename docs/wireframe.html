@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Wireframe tương tác cho VMEC-20 với dữ liệu mô phỏng.">
+  <title>Khoảng Lặng · Wireframe VMEC-20</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #142d27;
+      --muted: #4b6058;
+      --paper: #fcfbf6;
+      --white: #fffefa;
+      --line: #d4ddd1;
+      --green: #1d5744;
+      --pale: #e7eee4;
+      --warm: #f3eee2;
+      --danger: #932d31;
+      --danger-bg: #fcf0ec;
+      --radius: 20px;
+      font-family: "DM Sans", "Segoe UI", sans-serif;
+      font-size: 16px;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); line-height: 1.55; }
+    a { color: var(--green); text-underline-offset: 3px; }
+    button, select, input { font: inherit; }
+    button, select { color: var(--ink); }
+    button { cursor: pointer; }
+    button:disabled { cursor: default; opacity: .56; }
+    :focus-visible { outline: 3px solid #166962; outline-offset: 4px; }
+    h1:focus { outline: none; }
+    h1, h2, h3, p { margin: 0; }
+    h1, h2, h3 { line-height: 1.15; }
+    h1 { font: 650 clamp(2.2rem, 4.7vw, 4rem)/1.10 "DM Sans", "Segoe UI", sans-serif; letter-spacing: -.038em; }
+    h2 { font: 650 1.5rem/1.2 "DM Sans", "Segoe UI", sans-serif; letter-spacing: -.024em; }
+    h3 { font-size: 1rem; }
+    p + p { margin-top: .65rem; }
+    .muted, .subtle { color: var(--muted); }
+    .subtle { font-size: .875rem; }
+    .preview { min-height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 10px clamp(14px, 3.2vw, 48px); color: #f8fbf4; background: #163a30; }
+    .preview-info { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+    .preview-info strong { font-size: .84rem; letter-spacing: .09em; }
+    .preview-info span { color: #d6e3d9; font-size: .84rem; }
+    .preview-actions, .row { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; }
+    .preview button { min-height: 38px; padding: 5px 12px; border-radius: 8px; border: 1px solid #779083; background: transparent; color: #fff; font-size: .84rem; white-space: nowrap; }
+    .preview button[aria-pressed="true"] { background: #e4eee4; color: #143a30; border-color: #e4eee4; font-weight: 700; }
+    .preview :focus-visible { outline-color: #f5d39d; }
+    .layout { min-height: calc(100vh - 64px); display: grid; grid-template-columns: 236px minmax(0, 1fr); }
+    .sidebar { background: var(--white); padding: 29px 17px 18px; border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: 36px; }
+    .brand { display: flex; align-items: center; gap: 11px; padding: 0 8px; }
+    .brand-mark { position: relative; width: 37px; height: 37px; flex: 0 0 37px; border-radius: 50%; background: var(--green); }
+    .brand-mark::before, .brand-mark::after { content: ""; position: absolute; top: 10px; left: 9px; width: 15px; height: 17px; border-radius: 12px 12px 3px 12px; border: 1px solid #e9eee1; }
+    .brand-mark::after { transform: translateX(5px) rotate(90deg); }
+    .brand strong { display: block; font: 700 1.27rem/1.15 "DM Sans", "Segoe UI", sans-serif; white-space: nowrap; }
+    .brand small { display: block; margin-top: 5px; color: var(--muted); font-size: .72rem; }
+    .nav { display: grid; gap: 6px; }
+    .nav button { min-height: 46px; text-align: left; padding: 7px 12px; background: transparent; border: 1px solid transparent; border-radius: 10px; display: flex; align-items: center; gap: 11px; font-size: .92rem; }
+    .nav button:hover { background: #f3f5ef; }
+    .nav button[aria-current="page"] { background: var(--pale); border-color: #dfe8dd; font-weight: 700; }
+    .nav-mark { width: 16px; height: 16px; flex: 0 0 16px; border: 1.5px solid currentColor; border-radius: 4px; display: grid; place-items: center; font-size: 11px; font-weight: 700; line-height: 1; }
+    .nav-mark.round { border-radius: 100%; }
+    .sidebar-footer { margin-top: auto; padding: 14px 8px 0; border-top: 1px solid var(--line); display: grid; gap: 9px; }
+    .quiet { padding: 4px 0; border: 0; background: transparent; text-align: left; text-decoration: underline; text-underline-offset: 3px; font-size: .88rem; color: var(--green); }
+    .page { min-width: 0; }
+    .page-bar { min-height: 75px; padding: 11px clamp(16px, 3.4vw, 50px); display: flex; justify-content: space-between; align-items: center; gap: 12px; border-bottom: 1px solid var(--line); background: var(--white); }
+    .page-bar span { font-size: .86rem; color: var(--muted); }
+    .btn { min-height: 42px; padding: 8px 15px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 9px; border: 1px solid var(--line); background: var(--white); color: var(--ink); text-decoration: none; font-weight: 650; font-size: .88rem; }
+    .btn:hover:not(:disabled) { background: var(--pale); }
+    .btn-primary { background: var(--green); color: #fff; border-color: var(--green); }
+    .btn-primary:hover:not(:disabled) { background: #154535; }
+    .btn-alert { border-color: #d5a09b; color: var(--danger); background: var(--danger-bg); white-space: nowrap; }
+    .btn-alert:hover:not(:disabled) { background: #f7e2dc; }
+    .content { max-width: 1270px; margin: 0 auto; padding: 32px clamp(16px, 3.4vw, 50px) 38px; display: grid; gap: 20px; }
+    .content > .subtle:last-child { margin-top: 3px; }
+    .surface { border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(18px, 2.6vw, 30px); background: var(--white); min-width: 0; }
+    .surface > * + * { margin-top: 13px; }
+    .hero { position: relative; display: grid; grid-template-columns: 1.18fr .82fr; overflow: hidden; border-radius: 25px; border: 1px solid #d2dfd0; background: #e8efe5; }
+    .hero-copy { position: relative; z-index: 1; padding: clamp(25px, 4vw, 57px); align-self: center; }
+    .hero-copy p { max-width: 49ch; margin-top: 18px; color: #35574b; }
+    .hero-copy .row { margin-top: 21px; }
+    .hero-art { position: relative; min-height: 247px; overflow: hidden; background: #dce8da; isolation: isolate; }
+    .hero-art::before { content: ""; position: absolute; height: min(15vw, 215px); aspect-ratio: 1; left: 17%; top: 12%; background: #e6c597; border-radius: 50%; }
+    .hero-art::after { content: ""; position: absolute; width: 150%; height: 85%; left: -18%; bottom: -45%; border-radius: 52%; background: #244f40; transform: rotate(-13deg); box-shadow: -36px -37px 0 #39745b, 43px -87px 0 #8eae91; }
+    .art-line { position: absolute; border: 1px solid rgba(247,252,240,.55); width: 110%; height: 64%; border-radius: 50%; transform: rotate(-13deg); bottom: -18%; left: -12%; z-index: 2; }
+    .art-line + .art-line { bottom: -22%; }
+    .columns { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+    .columns.equal { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .section-head { display: grid; gap: 9px; }
+    .section-head h1 { font-size: clamp(2.25rem, 4.25vw, 3.4rem); }
+    .surface.warm { background: var(--warm); }
+    .crisis { border: 1px solid #deaaa5; border-radius: var(--radius); background: var(--danger-bg); padding: clamp(18px, 3.5vw, 38px); }
+    .crisis h1 { color: #762328; }
+    .crisis > * + * { margin-top: 12px; }
+    .crisis > p { max-width: 65ch; }
+    .crisis a { color: #762328; }
+    .crisis label { display: inline-block; font-weight: 700; margin-right: 6px; }
+    select { border: 1px solid #947877; min-height: 40px; padding: 6px 12px; border-radius: 8px; background: var(--white); max-width: 100%; }
+    .help-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .help-options article { background: #fff9f5; border: 1px solid #dfb3ac; border-radius: 12px; padding: 15px; }
+    .help-options strong { display: block; font-size: 1.35rem; margin: 4px 0; color: #762328; }
+    .help-options article > p + p { margin-top: 6px; }
+    .pill { display: inline-flex; align-items: center; border-radius: 99px; padding: 4px 10px; color: #284737; background: var(--pale); font-size: .82rem; font-weight: 700; max-width: 100%; }
+    .pill.attention { color: #762328; background: #f7dfd9; }
+    .check { display: flex; align-items: flex-start; gap: 10px; }
+    .check input { flex: 0 0 auto; width: 19px; height: 19px; accent-color: var(--green); margin: 3px 0 0; }
+    .conversation { min-height: 225px; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 16px; background: #f2f5ee; border-radius: 13px; }
+    .bubble { max-width: min(100%, 58ch); padding: 10px 13px; border-radius: 10px; background: var(--white); border: 1px solid var(--line); }
+    .bubble.user { background: #dceadc; align-self: flex-end; }
+    .bubble small { display: block; font-weight: 700; color: var(--muted); }
+    .scenario { display: grid; gap: 8px; }
+    .scenario .btn { justify-content: flex-start; text-align: left; }
+    .exercise { min-height: 208px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+    .exercise > * { margin-top: 0; }
+    .exercise > a:last-child { margin-top: auto; }
+    fieldset { padding: 0; border: 0; margin-inline: 0; }
+    legend { padding: 0; font-weight: 700; margin-bottom: 10px; }
+    .answer-list { display: grid; gap: 8px; }
+    .answer-list label { padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; }
+    ul, ol { margin: 8px 0 0; padding-left: 21px; }
+    li + li { margin-top: 6px; }
+    .flow-list { display: grid; gap: 12px; }
+    .flow-list li { padding-left: 5px; }
+    .divider { border-top: 1px solid var(--line); padding-top: 12px; }
+    .case-data { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; }
+    .case-data dt { color: var(--muted); }
+    .case-data dd { margin: 0; }
+    @media (max-width: 1020px) {
+      .layout { grid-template-columns: 191px minmax(0, 1fr); }
+      .sidebar { padding-inline: 13px; }
+      .hero { grid-template-columns: 1.35fr .65fr; }
+    }
+    @media (max-width: 790px) {
+      .layout { grid-template-columns: minmax(0, 1fr); }
+      .sidebar { padding: 12px 16px; border-right: 0; border-bottom: 1px solid var(--line); gap: 12px; }
+      .brand { padding: 0; }
+      .nav { display: flex; flex-wrap: wrap; gap: 4px; }
+      .nav button { min-height: 36px; padding: 5px 8px; gap: 6px; font-size: .83rem; }
+      .sidebar-footer { display: none; }
+      .page-bar { min-height: 55px; }
+      .content { padding-top: 18px; }
+    }
+    @media (max-width: 580px) {
+      .preview { flex-direction: column; align-items: stretch; gap: 7px; }
+      .preview-info { gap: 6px 10px; }
+      .hero, .columns, .columns.equal, .help-options { grid-template-columns: minmax(0, 1fr); }
+      .hero-art { min-height: 110px; }
+      .hero-art::before { height: 65px; }
+      .case-data { grid-template-columns: minmax(0, 1fr); gap: 3px; }
+      .case-data dd + dt { margin-top: 6px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="preview" aria-label="Điều khiển nguyên mẫu">
+    <div class="preview-info"><strong>VMEC-20</strong><span>Nguyên mẫu tương tác · Dữ liệu giả lập</span></div>
+    <div class="preview-actions" id="preview-actions"></div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark" aria-hidden="true"></span><div><strong>Khoảng Lặng</strong><small>Hỗ trợ sức khỏe tinh thần</small></div></div>
+      <nav class="nav" id="navigation" aria-label="Điều hướng ứng dụng"></nav>
+      <div class="sidebar-footer">
+        <button class="quiet" type="button" data-action="about">Giới hạn và quyền riêng tư</button>
+        <p class="subtle">Phiên demo tự xóa khi tải lại trang.</p>
+      </div>
+    </aside>
+    <div class="page">
+      <div class="page-bar" id="page-bar"></div>
+      <main class="content" id="screen"></main>
+    </div>
+  </div>
+  <noscript>Hãy bật JavaScript để chạy các luồng mẫu.</noscript>
+  <script>
+    'use strict';
+
+    const demo = {
+      role: 'user', page: 'welcome', accepted: false, next: 'home',
+      chatted: false, screenTool: 'phq', screened: false, reminders: true,
+      reason: 'manual', safetyActive: false, region: 'vn', shared: false,
+      failSend: false, caseStatus: 'new', outcome: 'none'
+    };
+    const routeNames = {
+      welcome: 'Trang đầu', home: 'Trang đầu', chat: 'Trò chuyện', screening: 'Sàng lọc',
+      result: 'Kết quả sàng lọc', exercises: 'Bài tập', crisis: 'Hỗ trợ ngay',
+      queue: 'Hàng đợi', flow: 'Luồng giao diện', about: 'Quyền riêng tư'
+    };
+    const userNav = [['home', 'Trang đầu', '•'], ['chat', 'Trò chuyện', '··'], ['screening', 'Sàng lọc', '✓'], ['exercises', 'Bài tập', '≋']];
+    const reasonLabels = {
+      manual: 'Người dùng mở Hỗ trợ ngay', chat: 'Tín hiệu tự hại trong hội thoại mẫu',
+      uncertain: 'Tín hiệu cần làm rõ trong hội thoại mẫu',
+      'uncertain-held': 'Tín hiệu chưa rõ sau bước làm rõ mẫu', phq: 'Mục an toàn của PHQ-9 mẫu',
+      medical: 'Cờ đỏ y khoa từ quy tắc mẫu'
+    };
+    const caseLabels = {
+      new: 'Chưa gửi', failed: 'Chưa gửi được', waiting: 'Đã gửi, đang chờ tiếp nhận',
+      accepted: 'Chuyên gia đã tiếp nhận', handling: 'Chuyên gia đang xử lý',
+      withdrawn: 'Đã rút yêu cầu', resolved: 'Chuyên gia đã cập nhật kết quả bàn giao'
+    };
+    const sentStatuses = ['waiting', 'accepted', 'handling', 'resolved'];
+
+    const actionButton = (action, label, style = '') => `<button class="btn ${style}" type="button" data-action="${action}">${label}</button>`;
+    const heading = (title, detail) => `<div class="section-head"><h1 tabindex="-1">${title}</h1>${detail ? `<p class="muted">${detail}</p>` : ''}</div>`;
+    const limits = () => '<p class="subtle">AI hỗ trợ ban đầu. Bác sĩ phụ trách chẩn đoán, điều trị, kê đơn và điều chỉnh thuốc.</p>';
+
+    function welcome() {
+      return `<section class="hero">
+        <div class="hero-copy"><h1 tabindex="-1">Bắt đầu phiên<br>đồng hành</h1><p>Chia sẻ điều đang khiến bạn bận tâm, thử một bài tập tự chăm sóc hoặc theo dõi tâm trạng bằng lượt sàng lọc mẫu.</p></div>
+        <div class="hero-art" aria-hidden="true"><span class="art-line"></span><span class="art-line"></span></div>
+      </section>
+      <div class="columns">
+        <section class="surface"><h2>Bắt đầu phiên mô phỏng</h2><p>Phiên dùng tình huống có sẵn. Chỉ dữ liệu mẫu đi vào hàng đợi chuyên gia mô phỏng khi bạn đồng ý riêng.</p>
+          <label class="check"><input id="start-consent" type="checkbox"><span>Tôi đủ 18 tuổi và đồng ý xử lý dữ liệu mẫu trong phiên.</span></label>
+          <button class="btn btn-primary" type="button" id="start-button" data-action="start" disabled>Bắt đầu phiên <span aria-hidden="true">→</span></button>
+        </section>
+        <section class="surface warm"><h2>Phạm vi hỗ trợ</h2>${limits()}<p class="subtle">Hỗ trợ ngay có thể mở bất kỳ lúc nào, kể cả trước khi bắt đầu phiên.</p>${actionButton('about', 'Quyền riêng tư')}</section>
+      </div>`;
+    }
+
+    function home() {
+      return `<section class="hero">
+        <div class="hero-copy"><h1 tabindex="-1">Hôm nay bạn<br>thấy thế nào?</h1><p>Bạn có thể bắt đầu từ điều mình đang cảm thấy, hoặc dành vài phút cho một bài tập có nguồn.</p>
+          <div class="row">${actionButton('chat', 'Bắt đầu trò chuyện <span aria-hidden="true">→</span>', 'btn-primary')}${actionButton('exercises', 'Xem bài tập')}</div>
+        </div><div class="hero-art" aria-hidden="true"><span class="art-line"></span><span class="art-line"></span></div>
+      </section>
+      <div class="columns equal">
+        <section class="surface"><h2>Sàng lọc tâm trạng</h2><p>${demo.screened ? 'Bạn đã hoàn thành một lượt sàng lọc mẫu trong phiên này.' : 'Bạn có thể bắt đầu lượt sàng lọc bất cứ lúc nào.'}</p>${actionButton('screening', demo.screened ? 'Mở lại sàng lọc' : 'Mở sàng lọc')}</section>
+        <section class="surface warm"><h2>Kết nối hỗ trợ</h2><p>Nếu muốn trao đổi với một người, bạn có thể xem cách gửi yêu cầu hỗ trợ và theo dõi trạng thái tiếp nhận.</p>${actionButton('crisis', 'Mở lựa chọn hỗ trợ')}</section>
+      </div>${limits()}`;
+    }
+
+    function chat() {
+      if (demo.safetyActive) {
+        return `${heading('Trò chuyện', 'Phiên hỗ trợ đang tạm dừng để bạn xem các lựa chọn an toàn.')}
+          <section class="surface"><h2>Ưu tiên hỗ trợ ngay</h2><p>Trạng thái bàn giao hiện tại: <strong>${caseLabels[demo.caseStatus]}</strong>.</p>${actionButton('crisis', 'Mở lại bảng hỗ trợ', 'btn-alert')}</section>`;
+      }
+      return `${heading('Trò chuyện', 'Chọn tình huống có sẵn để xem cách trợ lý phản hồi.')}
+        <div class="columns">
+          <section class="surface"><h2>Phiên đồng hành</h2>
+            <div class="conversation" aria-label="Nội dung hội thoại mẫu">
+              <p class="bubble"><small>Trợ lý AI</small>Chào bạn. Bạn muốn bắt đầu từ điều gì hôm nay?</p>
+              ${demo.chatted ? '<p class="bubble user"><small>Bạn · tình huống mẫu</small>Mình thấy căng thẳng vì công việc.</p><p class="bubble"><small>Trợ lý AI</small>Nghe như công việc đang chiếm nhiều sức của bạn. Nếu muốn, bạn có thể xem bài tập thở nhẹ có nguồn từ NHS.</p>' : ''}
+            </div>
+            ${demo.chatted ? actionButton('exercises', 'Xem bài tập và nguồn') : actionButton('chat-stress', 'Mình thấy căng thẳng vì công việc', 'btn-primary')}
+          </section>
+          <section class="surface warm"><h2>Tình huống an toàn</h2><div class="scenario">
+            ${actionButton('risk-chat', 'Có tín hiệu tự hại')}
+            ${actionButton('risk-uncertain', 'Tín hiệu cần làm rõ')}
+            ${actionButton('risk-medical', 'Thử cảnh báo y khoa giả lập')}
+          </div></section>
+        </div>${limits()}`;
+    }
+
+    function screening() {
+      if (demo.safetyActive) {
+        return `${heading('Sàng lọc tâm trạng', 'Sàng lọc đang tạm dừng trong phiên hỗ trợ an toàn.')}
+          <section class="surface">${actionButton('crisis', 'Mở lại bảng hỗ trợ', 'btn-alert')}</section>`;
+      }
+      const phq = demo.screenTool === 'phq';
+      return `${heading('Sàng lọc tâm trạng', 'Mỗi thang chỉ có một mục minh họa. Bản mẫu không tính điểm.')}
+        <div class="columns">
+          <section class="surface">
+            <div class="row" aria-label="Chọn thang sàng lọc">
+              <button class="btn ${phq ? 'btn-primary' : ''}" type="button" data-action="tool-phq" aria-pressed="${phq}">PHQ-9</button>
+              <button class="btn ${phq ? '' : 'btn-primary'}" type="button" data-action="tool-gad" aria-pressed="${!phq}">GAD-7</button>
+            </div>
+            <fieldset><legend>${phq ? 'Mục an toàn mẫu về ý nghĩ tự làm hại bản thân' : 'Mục mẫu về cảm giác lo lắng'}</legend>
+              <div class="answer-list">
+                <label class="check"><input type="radio" name="screen-answer" value="none"><span>Chọn câu trả lời mẫu “Không có”</span></label>
+                <label class="check"><input type="radio" name="screen-answer" value="yes"><span>Chọn câu trả lời mẫu “Có”</span></label>
+              </div>
+            </fieldset>
+            <div class="row"><button class="btn btn-primary" type="button" id="screen-submit" data-action="screen-submit" disabled>Xem bước tiếp theo</button>${actionButton('home', 'Bỏ qua')}</div>
+          </section>
+          <section class="surface warm"><h2>Nhắc sàng lọc định kỳ</h2><p>Ứng dụng đề xuất sàng lọc lại mỗi 14 ngày. Bản mẫu minh họa tùy chọn nhắc trong ứng dụng.</p><label class="check"><input id="reminders" type="checkbox" ${demo.reminders ? 'checked' : ''}><span>Hiện gợi ý sàng lọc định kỳ</span></label>${limits()}</section>
+        </div>`;
+    }
+
+    function result() {
+      return `${heading('Đã hoàn thành lượt mẫu', 'Bạn có thể quay lại khi muốn xem lại luồng sàng lọc định kỳ.')}
+        <section class="surface"><h2>Tiếp theo</h2><p>Nếu cảm xúc đang ảnh hưởng đến sinh hoạt, bạn có thể cân nhắc trao đổi với chuyên gia.</p>
+          <div class="row">${actionButton('exercises', 'Xem bài tập có nguồn', 'btn-primary')}${actionButton('home', 'Về trang đầu')}</div>
+        </section>${limits()}`;
+    }
+
+    function exercises() {
+      if (demo.safetyActive) {
+        return `${heading('Bài tập tự chăm sóc', 'Các gợi ý đang tạm dừng trong phiên hỗ trợ an toàn.')}
+          <section class="surface">${actionButton('crisis', 'Mở lại bảng hỗ trợ', 'btn-alert')}</section>`;
+      }
+      return `${heading('Bài tập tự chăm sóc', 'Chọn một bài có nguồn để xem hướng dẫn gốc.')}
+        <div class="columns equal">
+          <article class="surface exercise"><p class="subtle">NHS</p><h2>Thở nhẹ để thư giãn</h2><p>Tài liệu hướng dẫn thực hành thở nhẹ và đều, theo nhịp thoải mái.</p><a class="btn" href="https://www.nhs.uk/mental-health/self-help/guides-tools-and-activities/breathing-exercises-for-stress/" target="_blank" rel="noopener noreferrer">Xem nguồn NHS ↗</a></article>
+          <article class="surface exercise"><p class="subtle">WHO</p><h2>Neo mình vào hiện tại</h2><p>Bài thực hành trong cẩm nang quản lý căng thẳng của WHO. Trang tài liệu có bản tiếng Việt.</p><a class="btn" href="https://www.who.int/westernpacific/publications/i/item/9789240003927" target="_blank" rel="noopener noreferrer">Xem nguồn WHO ↗</a></article>
+        </div>${limits()}`;
+    }
+
+    function crisis() {
+      const sent = sentStatuses.includes(demo.caseStatus);
+      const canSend = ['new', 'failed'].includes(demo.caseStatus);
+      const medical = demo.reason === 'medical';
+      const detail = demo.reason === 'uncertain'
+        ? 'Bạn có thể dùng các lựa chọn hỗ trợ ngay. Bạn có đang gặp nguy hiểm ngay lúc này không?'
+        : 'Nếu bạn hoặc người bên cạnh đang gặp nguy hiểm, hãy ưu tiên hỗ trợ khẩn cấp ngay. Bạn có thể nhờ một người bạn tin cậy ở cạnh.';
+      const directory = demo.region === 'vn' ? `
+        <div class="help-options">
+          <article><h3>Khẩn cấp · Việt Nam</h3><strong>112</strong><p class="subtle">Tổng đài khẩn cấp quốc gia. Bạn cũng có thể đến khoa Cấp cứu gần nhất.</p><p class="subtle"><a href="https://xaydungchinhsach.chinhphu.vn/tong-dai-so-112-tiep-nhan-24-7-cac-thong-tin-ve-su-co-thien-tai-tham-hoa-119250902150528929.htm" target="_blank" rel="noopener noreferrer">Nguồn Chính phủ ↗</a></p></article>
+          <article><h3>Hỗ trợ tinh thần · Ngày mai</h3><p class="subtle">Xem số điện thoại và giờ hoạt động trên trang của đơn vị hỗ trợ.</p><p class="subtle"><a href="https://duongdaynongngaymai.vn/?oai_link_source=model_response_hotline" target="_blank" rel="noopener noreferrer">Trang Đường dây nóng Ngày mai ↗</a></p></article>
+        </div>` : `<div class="help-options"><article><h3>Chưa có số đã xác minh cho khu vực này</h3><p>Gọi số cấp cứu địa phương hoặc đến khoa Cấp cứu gần nhất nếu đang gặp nguy hiểm.</p></article></div>`;
+      return `<section class="crisis"><h1 tabindex="-1">Hỗ trợ ngay</h1><p>${detail}</p>
+        <div><label for="region">Khu vực hiện tại</label><select id="region"><option value="vn" ${demo.region === 'vn' ? 'selected' : ''}>Việt Nam</option><option value="unknown" ${demo.region === 'unknown' ? 'selected' : ''}>Khu vực khác hoặc chưa rõ</option></select></div>
+        ${directory}<p class="subtle">Bản mẫu hiển thị thông tin để tham khảo. Cuộc gọi do bạn thực hiện trên thiết bị của mình.</p>
+        ${medical ? '<p class="subtle">Tình huống này minh họa chuyển ngay tới hỗ trợ khẩn cấp khi có cờ đỏ y khoa mẫu. Hãy hỏi bác sĩ hoặc dược sĩ về thuốc đang dùng. Bản mẫu không đưa ra hướng dẫn dùng hoặc đổi thuốc.</p>' : ''}
+        ${demo.reason === 'uncertain' ? `<div class="row">${actionButton('risk-chat', 'Mẫu · Cần trợ giúp ngay', 'btn-alert')}${actionButton('risk-hold', 'Mẫu · Chưa rõ')}</div>` : ''}
+      </section>
+      <div class="columns">
+        <section class="surface"><h2>Gửi yêu cầu tới chuyên gia</h2>
+          <p class="pill ${demo.caseStatus === 'failed' ? 'attention' : ''}" role="status">${caseLabels[demo.caseStatus]}</p>
+          <p class="subtle">Hàng đợi dùng dữ liệu giả lập. Nếu đang nguy hiểm, hãy dùng các lựa chọn khẩn cấp phía trên ngay.</p>
+          ${sent ? '<p class="subtle">Đã ghi nhận đồng ý chia sẻ cho yêu cầu mẫu này.</p>' : ''}
+          ${demo.caseStatus === 'waiting' ? actionButton('withdraw', 'Rút yêu cầu đang chờ') : ''}
+          ${demo.caseStatus === 'withdrawn' ? '<p>Yêu cầu đã được gỡ khỏi hàng đợi mô phỏng.</p>' : ''}
+          ${canSend ? `
+            <p><strong>Tóm tắt sẽ chia sẻ</strong></p>
+            <ul><li>Mã phiên giả lập VMEC-001</li><li>${reasonLabels[demo.reason]}</li><li>Khu vực bạn chọn và thời điểm gửi</li></ul>
+            <label class="check"><input type="checkbox" id="share-consent" ${demo.shared ? 'checked' : ''}><span>Tôi đồng ý gửi tóm tắt mẫu trên cho chuyên gia.</span></label>
+            <button class="btn btn-primary" type="button" id="share-button" data-action="share" ${demo.shared ? '' : 'disabled'}>${demo.caseStatus === 'failed' ? 'Thử gửi lại' : 'Gửi yêu cầu mô phỏng'}</button>
+            ${demo.caseStatus === 'new' ? `<label class="check subtle divider"><input type="checkbox" id="simulate-failure" ${demo.failSend ? 'checked' : ''}><span>Mô phỏng lỗi khi gửi lần đầu</span></label>` : ''}` : ''}
+        </section>
+        <section class="surface warm"><h2>Nhờ người bạn tin cậy</h2><p>Bạn có thể tự liên hệ một người thân hoặc bạn bè để nhờ họ ở cạnh hoặc giúp tiếp cận hỗ trợ trực tiếp.</p><p class="subtle">Tùy chọn gửi liên hệ khẩn cấp có đồng ý thuộc phạm vi nâng cao.</p></section>
+      </div>`;
+    }
+
+    function queue() {
+      const hasCase = sentStatuses.includes(demo.caseStatus);
+      return `${heading('Hàng đợi hỗ trợ', 'Góc nhìn chuyên gia dùng dữ liệu giả lập và trạng thái đồng bộ với vai trò người dùng.')}
+        ${hasCase ? `<div class="columns">
+          <section class="surface"><h2>Phiên VMEC-001</h2><p class="pill ${demo.caseStatus === 'waiting' ? 'attention' : ''}">${caseLabels[demo.caseStatus]}</p>
+            <dl class="case-data"><dt>Thời điểm gửi</dt><dd>${demo.caseTime}</dd>${demo.caseStatus === 'waiting' ? '' : `<dt>Tín hiệu</dt><dd>${reasonLabels[demo.caseReason]}</dd><dt>Khu vực</dt><dd>${demo.caseRegion === 'vn' ? 'Việt Nam' : 'Chưa rõ'}</dd><dt>Chia sẻ</dt><dd>Đã đồng ý gửi tóm tắt tối thiểu</dd>`}</dl>
+            ${demo.caseStatus !== 'waiting' && demo.caseReason === 'medical' ? '<p class="subtle">Cảnh báo giả lập chỉ để chuyên gia xem xét trong luồng bàn giao. Hồ sơ thật và thao tác kê đơn nằm ngoài bản mẫu.</p>' : ''}
+            ${demo.caseStatus === 'waiting' ? actionButton('claim', 'Tiếp nhận ca', 'btn-primary') : ''}
+            ${demo.caseStatus === 'accepted' ? actionButton('handle', 'Bắt đầu xử lý', 'btn-primary') : ''}
+            ${demo.caseStatus === 'handling' ? `<p class="subtle divider">Chọn kết quả xử lý mô phỏng sau khi chuyên gia xem xét.</p><div class="row">${actionButton('close-connected', 'Đã bàn giao', 'btn-primary')}${actionButton('close-unreached', 'Chưa liên hệ được')}</div>` : ''}
+            ${demo.caseStatus === 'resolved' ? `<p class="divider">Kết quả mô phỏng: <strong>${demo.outcome === 'connected' ? 'Đã bàn giao' : 'Chưa liên hệ được'}</strong></p>` : ''}
+          </section><section class="surface warm"><h2>Nhật ký xử lý</h2><ol><li>Người dùng đồng ý và yêu cầu đã vào hàng đợi.</li>${demo.caseStatus !== 'waiting' ? '<li>Chuyên gia xác nhận tiếp nhận.</li>' : ''}${['handling', 'resolved'].includes(demo.caseStatus) ? '<li>Chuyên gia bắt đầu xử lý.</li>' : ''}${demo.caseStatus === 'resolved' ? '<li>Chuyên gia ghi nhận kết quả xử lý mẫu.</li>' : ''}</ol></section></div>`
+        : `<section class="surface"><h2>Chưa có yêu cầu</h2><p>Từ vai trò người dùng, mở Hỗ trợ ngay, đồng ý chia sẻ và gửi yêu cầu mẫu để thấy ca xuất hiện tại đây.</p>${actionButton('role-user', 'Sang vai trò người dùng')}</section>`}`;
+    }
+
+    function flow() {
+      return `${heading('Luồng giao diện', 'Đổi vai trò ở thanh trên để xem hai phía của một phiên.')}
+        <div class="columns equal">
+          <section class="surface"><h2>Người dùng</h2><ol class="flow-list">
+            <li><strong>Bắt đầu.</strong> Đọc giới hạn và đồng ý tham gia phiên demo 18+. Nút Hỗ trợ ngay mở được trước bước này.</li>
+            <li><strong>Đồng hành.</strong> Chọn chat, sàng lọc mẫu hoặc mở bài tập có nguồn.</li>
+            <li><strong>An toàn.</strong> Tín hiệu khủng hoảng, mục an toàn dương tính hoặc nút hỗ trợ đưa người dùng đến bảng an toàn. Tín hiệu chưa rõ vẫn mở bảng này.</li>
+            <li><strong>Yêu cầu hỗ trợ.</strong> Xem tóm tắt sẽ chia sẻ, đồng ý riêng và gửi. Nếu gửi lỗi, trạng thái hiển thị ngay và cho phép thử lại.</li>
+          </ol></section>
+          <section class="surface"><h2>Chuyên gia</h2><ol class="flow-list">
+            <li><strong>Xem hàng đợi.</strong> Phiên chỉ xuất hiện sau khi gửi thành công.</li>
+            <li><strong>Tiếp nhận.</strong> Chuyên gia xác nhận tiếp nhận để xem tín hiệu và thông tin tối thiểu.</li>
+            <li><strong>Ghi kết quả.</strong> Chuyên gia ghi nhận kết quả mô phỏng. Người dùng thấy trạng thái cập nhật.</li>
+          </ol></section>
+        </div><section class="surface warm"><h2>Điểm kiểm tra khi trình diễn</h2><ul><li>Hỗ trợ ngay trước đồng ý. Đổi khu vực để xem thông tin dự phòng.</li><li>Trong Sàng lọc, chọn “Có” ở mục an toàn PHQ-9 để xem chuyển hướng ngay, trước khi xem kết quả.</li><li>Trong Trò chuyện, thử cảnh báo y khoa giả lập để xem bảng hỗ trợ mở ngay.</li><li>Bật lỗi gửi ở màn hỗ trợ. Thử lại, đổi sang vai trò chuyên gia và tiếp nhận ca, rồi quay lại kiểm tra trạng thái.</li></ul></section>`;
+    }
+
+    function about() {
+      return `${heading('Giới hạn và quyền riêng tư', 'Phiên này minh họa cách tương tác với VMEC-20.')}
+        <section class="surface"><h2>Quyền kiểm soát của bạn</h2><ul>
+          <li>Nguyên mẫu dùng dữ liệu giả lập và giữ trạng thái trong bộ nhớ của trang. Tải lại hoặc bấm Đặt lại để xóa phiên.</li>
+          <li>Khi gửi yêu cầu, bạn xem và đồng ý chia sẻ tóm tắt tối thiểu. Bảng chuyên gia chỉ nhận dữ liệu mẫu.</li>
+          <li>Các liên kết nguồn mở trang của đơn vị công bố. Hỗ trợ ngay luôn truy cập được.</li>
+        </ul>${limits()}</section>
+        <section class="surface warm"><h2>Phạm vi lâm sàng</h2>
+          <p class="subtle">Bản mẫu không nhập hồ sơ sức khỏe thật, kiểm tra tương tác thuốc thật, lập đơn thuốc điện tử hoặc kết nối hệ thống y tế.</p>
+          <p class="subtle">Trong phương án lâm sàng, bác sĩ hoặc dược sĩ xem xét cảnh báo tương tác thuốc. Việc dùng hồ sơ thật và tích hợp hệ thống cần được đơn vị y tế phê duyệt trước.</p>
+          ${actionButton(demo.role === 'expert' ? 'queue' : 'home', 'Quay lại')}
+        </section>`;
+    }
+
+    const screens = {welcome, home, chat, screening, result, exercises, crisis, queue, flow, about};
+    const screen = document.getElementById('screen');
+
+    function render(focus = false) {
+      const nav = demo.role === 'expert' ? [['queue', 'Hàng đợi', '≡']] : userNav;
+      const current = {welcome: 'home', result: 'screening'}[demo.page] || demo.page;
+      document.getElementById('preview-actions').innerHTML = `
+        <button type="button" data-action="role-user" aria-pressed="${demo.role === 'user'}">Người dùng</button>
+        <button type="button" data-action="role-expert" aria-pressed="${demo.role === 'expert'}">Chuyên gia</button>
+        <button type="button" data-action="flow" aria-pressed="${demo.page === 'flow'}">Luồng UI</button>
+        <button type="button" data-action="reset">Đặt lại</button>`;
+      document.getElementById('navigation').innerHTML = nav.map(([key, label, mark]) =>
+        `<button type="button" data-action="${key}" ${current === key ? 'aria-current="page"' : ''}><span class="nav-mark ${key === 'home' ? 'round' : ''}" aria-hidden="true">${mark}</span>${label}</button>`).join('');
+      document.getElementById('page-bar').innerHTML = `<span>${demo.role === 'expert' ? 'Chuyên gia' : 'Người dùng'} / ${routeNames[demo.page]}</span>${demo.role === 'expert' ? actionButton('about', 'Quyền riêng tư') : actionButton('urgent', 'Cần hỗ trợ ngay', 'btn-alert')}`;
+      screen.innerHTML = screens[demo.page]();
+      if (focus) {
+        screen.querySelector('h1').focus();
+        window.scrollTo(0, 0);
+      }
+    }
+
+    function go(page) {
+      if (!demo.accepted && ['home', 'chat', 'screening', 'exercises'].includes(page)) {
+        demo.next = page;
+        demo.page = 'welcome';
+      } else {
+        demo.page = page;
+      }
+      render(true);
+    }
+
+    function safety(reason) {
+      if (!sentStatuses.includes(demo.caseStatus)) demo.shared = false;
+      demo.reason = reason;
+      demo.safetyActive = true;
+      go('crisis');
+    }
+
+    document.addEventListener('click', event => {
+      const control = event.target.closest('[data-action]');
+      if (!control) return;
+      const action = control.dataset.action;
+
+      if (action.startsWith('role-')) {
+        demo.role = action.slice(5);
+        go(demo.role === 'expert' ? 'queue' : demo.safetyActive || demo.caseStatus !== 'new' ? 'crisis' : 'home');
+        return;
+      }
+      if (Object.hasOwn(screens, action)) {
+        go(action);
+        return;
+      }
+      if (action.startsWith('risk-')) {
+        if (action === 'risk-hold') {
+          demo.reason = 'uncertain-held';
+          go('crisis');
+        } else safety(action.slice(5));
+        return;
+      }
+      if (action.startsWith('tool-')) {
+        demo.screenTool = action.slice(5);
+        render();
+        screen.querySelector(`[data-action="${action}"]`).focus();
+        return;
+      }
+
+      switch (action) {
+        case 'urgent':
+          if (demo.safetyActive) go('crisis');
+          else safety('manual');
+          break;
+        case 'start':
+          demo.accepted = document.getElementById('start-consent').checked;
+          if (demo.accepted) go(demo.next);
+          break;
+        case 'chat-stress':
+          demo.chatted = true;
+          render(true);
+          break;
+        case 'screen-submit':
+          if (!document.querySelector('[name="screen-answer"]:checked')) return;
+          demo.screened = true;
+          go('result');
+          break;
+        case 'share':
+          if (!demo.shared || !['new', 'failed'].includes(demo.caseStatus)) return;
+          if (demo.failSend) {
+            demo.caseStatus = 'failed';
+            demo.failSend = false;
+          } else {
+            demo.caseStatus = 'waiting';
+            demo.caseReason = demo.reason;
+            demo.caseRegion = demo.region;
+            demo.caseTime = new Intl.DateTimeFormat('vi-VN', {hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Ho_Chi_Minh'}).format();
+          }
+          render();
+          const target = document.getElementById('share-button') || screen.querySelector('[role="status"]');
+          target.setAttribute('tabindex', '-1');
+          target.focus();
+          break;
+        case 'withdraw':
+          if (demo.caseStatus === 'waiting') demo.caseStatus = 'withdrawn';
+          render(true);
+          break;
+        case 'claim':
+          if (demo.caseStatus === 'waiting') demo.caseStatus = 'accepted';
+          render(true);
+          break;
+        case 'handle':
+          if (demo.caseStatus === 'accepted') demo.caseStatus = 'handling';
+          render(true);
+          break;
+        case 'close-connected':
+        case 'close-unreached':
+          if (demo.caseStatus !== 'handling') return;
+          demo.outcome = action.slice(6);
+          demo.caseStatus = 'resolved';
+          render(true);
+          break;
+        case 'reset':
+          window.location.reload();
+          break;
+      }
+    });
+
+    document.addEventListener('change', event => {
+      const field = event.target;
+      if (field.id === 'start-consent') document.getElementById('start-button').disabled = !field.checked;
+      if (field.id === 'reminders') demo.reminders = field.checked;
+      if (field.id === 'share-consent') {
+        demo.shared = field.checked;
+        document.getElementById('share-button').disabled = !field.checked;
+      }
+      if (field.id === 'simulate-failure') demo.failSend = field.checked;
+      if (field.id === 'region') {
+        demo.region = field.value;
+        if (!sentStatuses.includes(demo.caseStatus)) demo.shared = false;
+        render();
+        document.getElementById('region').focus();
+      }
+      if (field.name === 'screen-answer') {
+        if (demo.screenTool === 'phq' && field.value === 'yes') safety('phq');
+        else document.getElementById('screen-submit').disabled = false;
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>
